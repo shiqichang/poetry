@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  {% block meta %}<!-- block meta  -->{% endblock %}
+  <title>{% block title %} ? {% endblock %} - Quotation Share</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="../static/css/bootstrap-4.0.0-beta.1.css" type="text/css">
+  <link rel="stylesheet" href="../static/css/uikit.almost-flat.min.css" type="text/css">
+  <link rel="stylesheet" href="../static/css/uikit.gradient.min.css" type="text/css">
+  <link rel="stylesheet" href="../static/css/uikit.min.css" type="text/css">
+  <script src="../static/js/vue.min.js"></script>
+  <script src="../static/js/sha1.min.js"></script>
+  <script src="../static/js/jquery.min.js"></script>
+  <script src="../static/js/awesome.js"></script>
+  <script src="../static/js/uikit.min.js"></script>
+  <script src="../static/js/sticky.min.js"></script>
+  {% block beforehead %}<!-- before head  -->{% endblock %}
+</head>
+
+<body class="m-0">
+  <nav class="navbar navbar-expand-md bg-primary navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="/"><i class="fa d-inline fa-lg fa-cloud"></i><b>  Poetry</b></a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbar2SupportedContent" aria-controls="navbar2SupportedContent" aria-expanded="false"
+        aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+      <div class="uk-navbar-flip">
+        <ul class="uk-navbar-nav">
+        {% if __user__ %}
+          <li class="uk-parent" data-uk-dropdown>
+            <a href="/#0"><i class="uk-icon-user"></i> {{ __user__.name }}</a>
+            <div class="uk-dropdown uk-dropdown-navbar">
+              <ul class="uk-nav uk-nav-navbar">
+                  <li><a href="/signout"><i class="uk-icon-sign-out"></i> Sign out</a></li>
+              </ul>
+            </div>
+          </li>
+        {% else %}
+          <li><a href="/login"><i class="uk-icon-sign-in"></i> Log in</a></li>
+          <li><a href="/signup"><i class="uk-icon-edit"></i> Sign up</a></li>
+        {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- content -->
+  {% block content %}
+  {% endblock %}
+  <!-- // content -->
+
+  <div class="py-5 bg-dark text-white h-15">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 mt-3 text-center">
+          <p>© Copyright 2017 Sharon - All rights reserved.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="../static/js/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="../static/js/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+  <script src="../static/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+</body>
+{% block endbody %}<!-- before end  -->{% endblock %}
+</html>

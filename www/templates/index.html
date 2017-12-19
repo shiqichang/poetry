@@ -1,0 +1,74 @@
+{% extends '__base__.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block beforehead %}
+
+<script>
+</script>
+
+{% endblock %}
+
+{% block content %}
+  <div class="py-5 gradient-overlay text-center bg-secondary" style="background-image: url(&quot;../static/img/sakura.jpg&quot;);">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-12">
+              <h1 class="text-light">Poetry Slogan</h1>
+              <p class="text-light">在心为志，发言为诗，情动于中而形于言。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="py-5 w-100 h-100">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 h-75">
+          <h2 class="">What's New</h2>
+          <br>
+          {% for quote in quotes %}
+          <h2><a href="/quote/{{quote.id}}">{{ quote.user_name }}</a></h2>
+            <p class="">Posted by {{ quote.created_at|datetime }}</p>
+            <p>{{ quote.content }}</p>
+            <p><a href="/quote/{{ quote.id }}"> More...</a></p>
+          {% endfor %}
+        </div><br><br><br>
+          <div class="col-md-4 h-50">
+          <div class="card">
+            <div class="card-header"> Suggested Users </div>
+          </div>
+          <ol class="">
+            {% for quote in quotes %}
+            <li><a href="/quote/{{quote.id}}">{{ quote.user_name }}</a></li>
+            {% endfor %}
+          </ol>
+        </div><br><br><br>
+      </div>
+      <ul class="pagination">
+            <li class="page-item">
+              <a class="page-link" href="#" aria-label="Previous"> <span aria-hidden="true">«</span> <span class="sr-only">Previous</span> </a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#">1</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#">2</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#">3</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#">4</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#" aria-label="Next"> <span aria-hidden="true">»</span> <span class="sr-only">Next</span> </a>
+            </li>
+          </ul>
+    </div>
+  </div>
+{% endblock %}

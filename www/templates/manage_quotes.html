@@ -1,0 +1,103 @@
+{% extends '__base__.html' %}
+
+{% block title %}Quotes{% endblock %}
+
+{% block beforehead %}
+
+<script>
+
+function initVM(data) {
+    var vm = new Vue({
+        el: '#vm',
+        data: {
+            quotes: data.quotes,
+            page: data.page
+        },
+        methods: {
+            edit_quote: function (quote) {
+                location.assign('/manage/quotes/edit?id=' + quote.id);
+            },
+            delete_quote: function (quote) {
+                if (confirm('确认要删除“' + quote.user_name + '”？删除后不可恢复！')) {
+                    postJSON('/api/quotes/' + quote.id + '/delete', function (err, r) {
+                        if (err) {
+                            return alert(err.message || err.error || err);
+                        }
+                        refresh();
+                    });
+                }
+            }
+        }
+    });
+    $('#vm').show();
+}
+
+$(function() {
+    getJSON('/api/quotes', {
+        page: {{ page_index }}
+    }, function (err, results) {
+        if (err) {
+            return fatal(err);
+        }
+        $('#loading').hide();
+        initVM(results);
+    });
+});
+
+</script>
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="uk-width-1-1 uk-margin-bottom">
+        <div class="uk-panel uk-panel-box">
+            <ul class="uk-breadcrumb">
+                <li><a href="/manage/comments">Comments</a></li>
+                <li class="uk-active"><span>Quotes</span></li>
+                <li><a href="/manage/users">Users</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="error" class="uk-width-1-1">
+    </div>
+
+    <div id="loading" class="uk-width-1-1 uk-text-center">
+        <span><i class="uk-icon-spinner uk-icon-medium uk-icon-spin"></i> Loading...</span>
+    </div>
+
+    <div id="vm" class="uk-width-1-1">
+        <a href="/manage/quotes/create" class="uk-button uk-button-primary"><i class="uk-icon-plus"></i> New Quotes</a>
+
+        <table class="uk-table uk-table-hover">
+            <thead>
+                <tr>
+                    <th class="uk-width-2-10">Id</th>
+                    <th class="uk-width-2-10">Content</th>
+                    <th class="uk-width-2-10">CreateDate</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-repeat="quote: quotes" >
+                    <td>
+                        <span v-text="quote.id"></span>
+                    </td>
+                    <td>
+                        <span v-text="quote.content"></span>
+                    </td>
+                    <td>
+                        <span v-text="quote.created_at.toDateTime()"></span>
+                    </td>
+                    <td>
+                        <a href="#0" v-on="click: edit_quote(quote)"><i class="uk-icon-edit"></i>
+                        <a href="#0" v-on="click: delete_quote(quote)"><i class="uk-icon-trash-o"></i>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div v-component="pagination" v-with="page"></div>
+    </div>
+
+{% endblock %}

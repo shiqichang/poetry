@@ -1,0 +1,89 @@
+{% extends '__base__.html' %}
+
+{% block title %}{{ __user__.name }}{% endblock %}
+
+{% block beforehead %}
+
+    <script>
+        var comment_url = '/api/quotes/{{ quote.id }}/comments';
+        var quote_id = '{{ quote.id }}';
+        $(function () {
+            var $form = $('#form-comment');
+            $form.submit(function (e) {
+                e.preventDefault();
+                $form.showFormError('');
+                var content = $form.find('textarea').val().trim();
+                if (content==='') {
+                    return $form.showFormError('请输入评论内容！');
+                }
+                $form.postJSON(comment_url, {id: quote_id, content: content}, function(err, result) {
+                    if (err) {
+                        return $form.showFormError(err);
+                    }
+                    location.assign('/quote/{{ quote.id }}')
+                });
+            });
+        });
+    </script>
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="uk-width-medium-3-4">
+        <article class="uk-article">
+            <h2>{{ quote.user_name}}</h2>
+            <p class="uk-article-meta">Posted by{{ quote.created_at|datetime }}</p>
+            <p>{{ quote.html_content|safe }}</p>
+        </article>
+
+        <hr class="uk-article-divider">
+
+    {% if __user__ %}
+        <h3>Post Comment</h3>
+
+        <article class="uk-comment">
+            <header class="uk-comment-header">
+                <img class="uk-comment-avatar uk-border-circle" width="50" height="50" src="../static/img/user.png">
+                <h4 class="uk-comment-title">{{ __user__.name }}</h4>
+            </header>
+            <div class="uk-comment-body">
+                <form id="form-comment" class="uk-form">
+                    <div class="uk-alert uk-alert-danger uk-hidden"></div>
+                    <div class="uk-form-row">
+                        <textarea rows="6" placeholder="Saying something..." style="width:100%;resize:none;"></textarea>
+                    </div>
+                    <div class="uk-form-row">
+                        <button type="submit" class="uk-button uk-button-primary"><i class="uk-icon-comment"></i> Post</button>
+                    </div>
+                </form>
+            </div>
+        </article>
+
+        <hr class="uk-article-divider">
+    {% endif %}
+
+        <h3>Latest Comments</h3>
+
+        <ul class="uk-comment-list">
+            {% for comment in comments %}
+            <li>
+                <article class="uk-comment">
+                    <header class="uk-comment-header">
+                        <img class="uk-comment-avatar uk-border-circle" width="50" height="50" src="../static/img/user.png">
+                        <h4 class="uk-comment-title">{{ comment.user_name }} {% if comment.id==quote.id %}(Author){% endif %}</h4>
+                        <p class="uk-comment-meta">{{ comment.created_at|datetime }}</p>
+                    </header>
+                    <div class="uk-comment-body">
+                        {{ comment.html_content|safe }}
+                    </div>
+                </article>
+            </li>
+            {% else %}
+            <p>There was no comment...</p>
+            {% endfor %}
+        </ul>
+
+    </div>
+
+{% endblock %}
